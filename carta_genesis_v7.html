@@ -6,71 +6,45 @@
   <title>Feliz Mesesario 🌸</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
+    html, body { width: 100%; height: 100%; overflow: hidden; }
 
     #scene {
-      width: 100vw;
-      height: 100dvh;
-      position: relative;
-      overflow: hidden;
+      width: 100vw; height: 100dvh;
+      position: relative; overflow: hidden;
       background: #fff0f5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       transition: background 3s ease;
     }
-
     #scene.dark { background: #120008; }
 
-    /* ── Sobre ── */
     #sobre-wrap {
       position: relative;
       width: min(260px, 72vw);
-      cursor: pointer;
-      z-index: 20;
+      cursor: pointer; z-index: 20;
       transition: opacity 0.8s ease, transform 0.3s;
       filter: drop-shadow(0 8px 24px rgba(200,60,100,0.22));
       -webkit-tap-highlight-color: transparent;
       user-select: none;
     }
-
     #sobre-wrap:hover  { transform: scale(1.04); }
     #sobre-wrap:active { transform: scale(0.97); }
     #sobre-wrap.hide   { opacity: 0; pointer-events: none; }
-
-    #sobre-svg {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+    #sobre-svg { width: 100%; height: auto; display: block; }
 
     #hint {
-      text-align: center;
-      margin-top: 8px;
-      font-size: 13px;
-      color: #c0607a;
-      font-family: Georgia, serif;
-      font-style: italic;
+      text-align: center; margin-top: 8px;
+      font-size: 13px; color: #c0607a;
+      font-family: Georgia, serif; font-style: italic;
       transition: opacity .4s;
     }
 
-    /* ── Palabras volando ── */
     .palabra {
       position: absolute;
-      font-family: Georgia, serif;
-      font-style: italic;
-      pointer-events: none;
-      z-index: 30;
-      opacity: 0;
-      white-space: nowrap;
+      font-family: Georgia, serif; font-style: italic;
+      pointer-events: none; z-index: 30;
+      opacity: 0; white-space: nowrap;
       animation: volar var(--dur) ease-out forwards;
     }
-
     @keyframes volar {
       0%   { opacity: 0; transform: translate(0,0) scale(.3) rotate(var(--r0)); }
       18%  { opacity: 1; }
@@ -78,76 +52,62 @@
       100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.1) rotate(var(--r1)); }
     }
 
-    /* ── Árbol ── */
     #arbol-wrap {
-      position: absolute;
-      top: 0; left: 0;
+      position: absolute; top: 0; left: 0;
       width: 100%; height: 100%;
-      opacity: 0;
-      transition: opacity 2.2s ease;
-      z-index: 5;
-      pointer-events: none;
+      opacity: 0; transition: opacity 2.2s ease;
+      z-index: 5; pointer-events: none;
     }
-
     #arbol-wrap.show { opacity: 1; }
 
-    /* ── Hojas en el árbol ── */
+    /* El SVG ocupa toda el área pero respeta aspect-ratio */
+    #arbol-svg {
+      position: absolute;
+      /* Centramos el árbol horizontalmente y lo anclamos abajo */
+      width: 100%; height: 100%;
+      top: 0; left: 0;
+    }
+
     .hoja {
       position: absolute;
-      font-family: Georgia, serif;
-      font-style: italic;
-      pointer-events: none;
-      z-index: 8;
-      opacity: 0;
-      white-space: nowrap;
+      font-family: Georgia, serif; font-style: italic;
+      pointer-events: none; z-index: 8;
+      opacity: 0; white-space: nowrap;
       transition: opacity 1.4s ease;
+      transform-origin: left center;
     }
-
     .hoja.show { opacity: 1; }
 
-    /* ── Frase final ── */
     #frase {
       position: absolute;
-      top: clamp(30px, 7vh, 60px);
+      top: clamp(20px, 5vh, 55px);
       left: 50%;
       transform: translateX(-50%) scale(.7);
-      opacity: 0;
-      z-index: 40;
-      text-align: center;
-      width: 90%;
+      opacity: 0; z-index: 40;
+      text-align: center; width: 90%;
       transition: transform 1.5s cubic-bezier(.34,1.56,.64,1), opacity 1.5s ease;
     }
-
-    #frase.show {
-      transform: translateX(-50%) scale(1);
-      opacity: 1;
-    }
-
+    #frase.show { transform: translateX(-50%) scale(1); opacity: 1; }
     #frase h1 {
       font-family: Georgia, serif;
       font-size: clamp(22px, 5.5vw, 36px);
-      color: #ffb3c6;
-      font-style: italic;
-      line-height: 1.4;
+      color: #ffb3c6; font-style: italic; line-height: 1.4;
       text-shadow: 0 0 40px rgba(255,100,150,.8), 0 0 80px rgba(255,80,130,.4);
     }
-
     #frase p {
       font-size: clamp(11px, 2.5vw, 14px);
-      color: #f090a8;
-      font-style: italic;
-      margin-top: .4rem;
+      color: #f090a8; font-style: italic; margin-top: .4rem;
     }
   </style>
 </head>
 <body>
-
 <div id="scene">
 
-  <!-- Árbol (fondo) -->
+  <!-- ÁRBOL: SVG con id para medir su posición real en pantalla -->
   <div id="arbol-wrap">
-    <svg viewBox="0 0 520 620" xmlns="http://www.w3.org/2000/svg"
-         style="width:100%;height:100%;position:absolute;top:0;left:0">
+    <svg id="arbol-svg" viewBox="0 0 520 620" preserveAspectRatio="xMidYMid meet"
+         xmlns="http://www.w3.org/2000/svg">
+      <!-- Tronco y ramas principales -->
       <path d="M260 610 C258 575 255 545 258 510 C260 488 255 465 260 440" stroke="#3d1520" stroke-width="14" fill="none" stroke-linecap="round"/>
       <path d="M260 590 C245 595 225 598 210 594" stroke="#3d1520" stroke-width="6" fill="none" stroke-linecap="round"/>
       <path d="M260 590 C275 596 295 600 312 596" stroke="#3d1520" stroke-width="6" fill="none" stroke-linecap="round"/>
@@ -195,7 +155,7 @@
       <path d="M282 368 C286 348 288 328 292 308" stroke="#5a2030" stroke-width="2.5" fill="none" stroke-linecap="round"/>
       <path d="M302 310 C307 294 310 280 313 266" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
       <path d="M292 308 C296 292 298 278 300 262" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <!-- Flores decorativas -->
+      <!-- Flores decorativas en ramas -->
       <ellipse cx="95" cy="410" rx="5" ry="3" fill="#ffb3c6" opacity=".7" transform="rotate(-20,95,410)"/>
       <ellipse cx="130" cy="375" rx="4" ry="2.5" fill="#ff8fab" opacity=".8" transform="rotate(15,130,375)"/>
       <ellipse cx="200" cy="340" rx="5" ry="3" fill="#ffc2d4" opacity=".6" transform="rotate(-10,200,340)"/>
@@ -207,7 +167,7 @@
     </svg>
   </div>
 
-  <!-- Sobre clickeable -->
+  <!-- Sobre -->
   <div id="sobre-wrap">
     <svg id="sobre-svg" viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg">
       <rect x="0" y="0" width="260" height="180" rx="6" fill="#ffd6e7" stroke="#f4a0bb" stroke-width="1.5"/>
@@ -227,7 +187,6 @@
   </div>
 
 </div>
-
 <script>
   const palabras = [
     "te amo","mi niña","eres mi todo","preciosa","mi paz","te extraño","siempre",
@@ -243,19 +202,27 @@
     "#ffc2d4","#ff758f","#f72585","#ffa0b8","#ff3366"
   ];
 
+  // Puntos en coordenadas del viewBox (520×620) — exactamente sobre las ramas del SVG
   const puntosRamas = [
-    {x:170,y:452},{x:150,y:444},{x:132,y:432},{x:160,y:418},{x:152,y:408},
-    {x:340,y:452},{x:360,y:444},{x:385,y:432},{x:358,y:418},{x:366,y:408},
-    {x:195,y:425},{x:148,y:400},{x:118,y:392},{x:158,y:378},{x:148,y:355},
-    {x:325,y:425},{x:372,y:400},{x:402,y:392},{x:362,y:378},{x:368,y:355},
-    {x:122,y:335},{x:105,y:322},{x:150,y:312},{x:175,y:312},{x:120,y:285},{x:158,y:278},
-    {x:396,y:335},{x:415,y:322},{x:370,y:312},{x:345,y:312},{x:398,y:285},{x:360,y:278},
-    {x:235,y:362},{x:222,y:335},{x:228,y:312},{x:210,y:282},{x:222,y:266},
-    {x:285,y:362},{x:298,y:335},{x:292,y:312},{x:310,y:282},{x:298,y:266}
+    // Ramas bajas izquierda
+    {x:132,y:432},{x:115,y:390},{x:160,y:410},{x:152,y:362},{x:108,y:338},
+    // Ramas bajas derecha
+    {x:385,y:432},{x:405,y:390},{x:358,y:410},{x:368,y:362},{x:412,y:338},
+    // Ramas medias izquierda
+    {x:170,y:415},{x:165,y:370},{x:150,y:318},{x:175,y:315},{x:76,y:364},
+    // Ramas medias derecha
+    {x:350,y:415},{x:355,y:370},{x:370,y:318},{x:345,y:315},{x:442,y:364},
+    // Ramas altas izquierda
+    {x:128,y:378},{x:122,y:328},{x:120,y:285},{x:158,y:275},{x:75,y:308},
+    // Ramas altas derecha
+    {x:390,y:378},{x:396,y:328},{x:398,y:285},{x:360,y:275},{x:443,y:308},
+    // Centro izquierda
+    {x:218,y:310},{x:220,y:262},{x:207,y:266},{x:228,y:308},{x:238,y:368},
+    // Centro derecha
+    {x:302,y:310},{x:300,y:262},{x:313,y:266},{x:292,y:308},{x:282,y:368}
   ];
 
   let abierto = false;
-
   function rand(a, b) { return Math.random() * (b - a) + a; }
 
   function abrirCarta() {
@@ -305,33 +272,54 @@
     }, espera);
   }
 
+  function svgCoordsToScreen(svgX, svgY, svgEl) {
+    // Convierte coordenadas del viewBox a píxeles reales en pantalla
+    // considerando cómo el SVG se renderiza con preserveAspectRatio="xMidYMid meet"
+    const rect = svgEl.getBoundingClientRect();
+    const vbW = 520, vbH = 620;
+    const scW = rect.width, scH = rect.height;
+
+    // "meet" mantiene aspect ratio — calculamos la escala real usada
+    const scale = Math.min(scW / vbW, scH / vbH);
+    const renderedW = vbW * scale;
+    const renderedH = vbH * scale;
+
+    // Offset por el letterboxing (xMid/YMid centra)
+    const offX = rect.left + (scW - renderedW) / 2;
+    const offY = rect.top  + (scH - renderedH) / 2;
+
+    return {
+      x: offX + svgX * scale,
+      y: offY + svgY * scale
+    };
+  }
+
   function colocarHojas() {
-    const scene = document.getElementById('scene');
-    const sw = scene.offsetWidth, sh = scene.offsetHeight;
-    const scaleX = sw / 520, scaleY = sh / 620;
+    const scene  = document.getElementById('scene');
+    const svgEl  = document.getElementById('arbol-svg');
 
     palabras.forEach((txt, i) => {
       setTimeout(() => {
-        const p = puntosRamas[i % puntosRamas.length];
-        const el = document.createElement('div');
-        el.className = 'hoja';
+        const p    = puntosRamas[i % puntosRamas.length];
+        const pos  = svgCoordsToScreen(p.x, p.y, svgEl);
+        const el   = document.createElement('div');
+        el.className   = 'hoja';
         el.textContent = txt;
-        el.style.fontSize = rand(9, 13) + 'px';
-        el.style.color = colores[i % colores.length];
-        el.style.transform = `rotate(${rand(-28, 28)}deg)`;
-        el.style.left = (p.x * scaleX - 28) + 'px';
-        el.style.top  = (p.y * scaleY - 8) + 'px';
+        el.style.fontSize  = rand(9, 13) + 'px';
+        el.style.color     = colores[i % colores.length];
+        el.style.transform = `rotate(${rand(-22, 22)}deg)`;
+        // Centramos el texto en el punto de la rama
+        el.style.left = (pos.x - 24) + 'px';
+        el.style.top  = (pos.y - 8)  + 'px';
         scene.appendChild(el);
         requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
       }, i * 80);
     });
   }
 
-  // Soporte tanto click como touch
   const sobre = document.getElementById('sobre-wrap');
   sobre.addEventListener('click', abrirCarta);
   sobre.addEventListener('touchend', (e) => { e.preventDefault(); abrirCarta(); });
 </script>
-
 </body>
 </html>
