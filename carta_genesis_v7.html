@@ -1,0 +1,215 @@
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+#scene{
+  width:100%;height:640px;position:relative;overflow:hidden;
+  background:#fff0f5;display:flex;align-items:center;justify-content:center;
+  transition:background 3s ease;
+}
+#scene.dark{background:#120008}
+#sobre-wrap{
+  position:relative;width:260px;height:180px;cursor:pointer;z-index:20;
+  transition:opacity 0.8s ease,transform 0.3s;
+  filter:drop-shadow(0 8px 24px rgba(200,60,100,0.22));
+}
+#sobre-wrap:hover{transform:scale(1.04)}
+#sobre-wrap.hide{opacity:0;pointer-events:none}
+#hint{
+  position:absolute;bottom:-30px;left:50%;transform:translateX(-50%);
+  font-size:12px;color:#c0607a;font-family:Georgia,serif;font-style:italic;
+  white-space:nowrap;transition:opacity .4s;
+}
+.palabra{
+  position:absolute;font-family:Georgia,serif;font-style:italic;
+  pointer-events:none;z-index:30;opacity:0;white-space:nowrap;
+  animation:volar var(--dur) ease-out forwards;
+}
+@keyframes volar{
+  0%  {opacity:0;transform:translate(0,0) scale(.3) rotate(var(--r0));}
+  18% {opacity:1;}
+  82% {opacity:1;}
+  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.1) rotate(var(--r1));}
+}
+#arbol-wrap{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  opacity:0;transition:opacity 2.2s ease;z-index:5;pointer-events:none;
+}
+#arbol-wrap.show{opacity:1}
+.hoja{
+  position:absolute;font-family:Georgia,serif;font-style:italic;
+  pointer-events:none;z-index:8;opacity:0;white-space:nowrap;
+  transition:opacity 1.4s ease;
+}
+.hoja.show{opacity:1}
+#frase{
+  position:absolute;
+  top:55px;
+  left:50%;
+  transform:translateX(-50%) scale(.7);
+  opacity:0;z-index:40;text-align:center;width:90%;
+  transition:transform 1.5s cubic-bezier(.34,1.56,.64,1),opacity 1.5s ease;
+}
+#frase.show{transform:translateX(-50%) scale(1);opacity:1}
+#frase h1{
+  font-family:Georgia,serif;font-size:clamp(20px,4.5vw,34px);
+  color:#ffb3c6;font-style:italic;line-height:1.4;
+  text-shadow:0 0 40px rgba(255,100,150,.8),0 0 80px rgba(255,80,130,.4);
+}
+#frase p{font-size:12px;color:#f090a8;font-style:italic;margin-top:.3rem;}
+</style>
+
+<div id="scene">
+  <div id="arbol-wrap">
+    <svg viewBox="0 0 520 620" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+      <path d="M260 610 C258 575 255 545 258 510 C260 488 255 465 260 440" stroke="#3d1520" stroke-width="14" fill="none" stroke-linecap="round"/>
+      <path d="M260 590 C245 595 225 598 210 594" stroke="#3d1520" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M260 590 C275 596 295 600 312 596" stroke="#3d1520" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M260 490 C240 475 210 465 185 455" stroke="#4a1a25" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <path d="M260 490 C280 475 310 465 335 455" stroke="#4a1a25" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <path d="M260 460 C232 440 200 425 170 415" stroke="#4a1a25" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M260 460 C288 440 320 425 350 415" stroke="#4a1a25" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M260 440 C230 410 195 390 165 370" stroke="#4a1a25" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M260 440 C290 410 325 390 355 370" stroke="#4a1a25" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M185 455 C168 445 150 438 132 432" stroke="#5a2030" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M185 455 C172 440 165 425 160 410" stroke="#5a2030" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M335 455 C352 445 368 438 385 432" stroke="#5a2030" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M335 455 C348 440 355 425 358 410" stroke="#5a2030" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M170 415 C150 402 132 395 115 390" stroke="#5a2030" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M170 415 C160 398 155 380 152 362" stroke="#5a2030" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M350 415 C370 402 388 395 405 390" stroke="#5a2030" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M350 415 C360 398 365 380 368 362" stroke="#5a2030" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M165 370 C145 355 125 345 108 338" stroke="#5a2030" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M165 370 C158 352 155 335 150 318" stroke="#5a2030" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M165 370 C175 350 178 332 175 315" stroke="#5a2030" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M355 370 C375 355 395 345 412 338" stroke="#5a2030" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M355 370 C362 352 365 335 370 318" stroke="#5a2030" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M355 370 C345 350 342 332 345 315" stroke="#5a2030" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M132 432 C118 422 104 418 90 414" stroke="#6b2535" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M160 410 C148 398 138 388 128 378" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M115 390 C100 378 88 370 76 364" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M152 362 C140 348 130 338 122 328" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M108 338 C95 325 84 315 75 308" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M150 318 C138 305 128 295 120 285" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M175 315 C168 300 162 288 158 275" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M385 432 C400 422 414 418 428 414" stroke="#6b2535" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M358 410 C370 398 380 388 390 378" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M405 390 C418 378 430 370 442 364" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M368 362 C378 348 388 338 396 328" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M412 338 C425 325 435 315 443 308" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M370 318 C380 305 390 295 398 285" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M345 315 C350 300 356 288 360 275" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M260 440 C248 415 242 392 238 368" stroke="#4a1a25" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M238 368 C230 348 224 330 218 310" stroke="#5a2030" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M238 368 C234 348 232 328 228 308" stroke="#5a2030" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M218 310 C213 294 210 280 207 266" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M228 308 C224 292 222 278 220 262" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M260 440 C272 415 278 392 282 368" stroke="#4a1a25" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M282 368 C290 348 296 330 302 310" stroke="#5a2030" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M282 368 C286 348 288 328 292 308" stroke="#5a2030" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M302 310 C307 294 310 280 313 266" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M292 308 C296 292 298 278 300 262" stroke="#6b2535" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="95" cy="410" rx="5" ry="3" fill="#ffb3c6" opacity=".7" transform="rotate(-20,95,410)"/>
+      <ellipse cx="130" cy="375" rx="4" ry="2.5" fill="#ff8fab" opacity=".8" transform="rotate(15,130,375)"/>
+      <ellipse cx="200" cy="340" rx="5" ry="3" fill="#ffc2d4" opacity=".6" transform="rotate(-10,200,340)"/>
+      <ellipse cx="320" cy="345" rx="4" ry="2.5" fill="#ff8fab" opacity=".7" transform="rotate(20,320,345)"/>
+      <ellipse cx="390" cy="375" rx="5" ry="3" fill="#ffb3c6" opacity=".8" transform="rotate(-15,390,375)"/>
+      <ellipse cx="425" cy="412" rx="4" ry="2.5" fill="#ffc2d4" opacity=".6" transform="rotate(10,425,412)"/>
+      <ellipse cx="230" cy="300" rx="4" ry="2.5" fill="#ff8fab" opacity=".7" transform="rotate(-10,230,300)"/>
+      <ellipse cx="290" cy="300" rx="4" ry="2.5" fill="#ffb3c6" opacity=".7" transform="rotate(10,290,300)"/>
+      <circle cx="30" cy="40" r="1.5" fill="#ffb3c6" opacity=".7"/>
+      <circle cx="80" cy="18" r="1" fill="#ff8fab" opacity=".6"/>
+      <circle cx="470" cy="55" r="1.5" fill="#ffb3c6" opacity=".7"/>
+      <circle cx="490" cy="20" r="1" fill="#ffc2d4" opacity=".6"/>
+      <circle cx="260" cy="22" r="1.5" fill="#ff8fab" opacity=".5"/>
+      <circle cx="18" cy="500" r="1.2" fill="#ffb3c6" opacity=".4"/>
+      <circle cx="500" cy="480" r="1.2" fill="#ff8fab" opacity=".4"/>
+    </svg>
+  </div>
+
+  <div id="sobre-wrap" onclick="abrirCarta()">
+    <svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg" style="width:260px;height:180px;display:block">
+      <rect x="0" y="0" width="260" height="180" rx="6" fill="#ffd6e7" stroke="#f4a0bb" stroke-width="1.5"/>
+      <polygon points="0,180 260,180 130,100" fill="#f9bdd0"/>
+      <polygon points="0,0 0,180 130,100" fill="#f4b8cc" opacity=".5"/>
+      <polygon points="260,0 260,180 130,100" fill="#f4b8cc" opacity=".5"/>
+      <polygon points="0,0 260,0 130,88" fill="#f9c8d8" stroke="#f4a0bb" stroke-width="1"/>
+      <path d="M130 105 C130 105 112 92 104 97 C94 103 94 116 104 122 C111 127 122 133 130 140 C138 133 149 127 156 122 C166 116 166 103 156 97 C148 92 130 105 130 105Z" fill="#e05070" opacity=".9"/>
+    </svg>
+    <div id="hint">Toca para abrir ♡</div>
+  </div>
+
+  <div id="frase">
+    <h1>🌸 Feliz Mesesario<br>Mi Niña 🌸</h1>
+    <p>Cada mes a tu lado es mi lugar favorito del mundo</p>
+  </div>
+</div>
+
+<script>
+const palabras=["te amo","mi niña","eres mi todo","preciosa","mi paz","te extraño","siempre","mi corazón","hermosa","feliz","te quiero","mi vida","amor mío","mi cielo","especial","única","sonríe","te adoro","mi calma","mi mundo","para siempre","eres mi luz","mi dulzura","contigo","bonita","mi alegría","te necesito","eres perfecta","mi estrella","te cuido","mi sueño","eres mía","te abrazo","mi risa","te elijo","cada día","mi refugio","mi tesoro","eres todo","te llevo"];
+const colores=["#ff6b8a","#ffb3c6","#ff4d6d","#ff8fab","#e05070","#ffc2d4","#ff758f","#f72585","#ffa0b8","#ff3366"];
+const puntosRamas=[
+  {x:170,y:452},{x:150,y:444},{x:132,y:432},{x:160,y:418},{x:152,y:408},
+  {x:340,y:452},{x:360,y:444},{x:385,y:432},{x:358,y:418},{x:366,y:408},
+  {x:195,y:425},{x:148,y:400},{x:118,y:392},{x:158,y:378},{x:148,y:355},
+  {x:325,y:425},{x:372,y:400},{x:402,y:392},{x:362,y:378},{x:368,y:355},
+  {x:122,y:335},{x:105,y:322},{x:150,y:312},{x:175,y:312},{x:120,y:285},{x:158,y:278},
+  {x:396,y:335},{x:415,y:322},{x:370,y:312},{x:345,y:312},{x:398,y:285},{x:360,y:278},
+  {x:235,y:362},{x:222,y:335},{x:228,y:312},{x:210,y:282},{x:222,y:266},
+  {x:285,y:362},{x:298,y:335},{x:292,y:312},{x:310,y:282},{x:298,y:266},
+];
+let abierto=false;
+function rand(a,b){return Math.random()*(b-a)+a;}
+function abrirCarta(){
+  if(abierto)return;abierto=true;
+  document.getElementById('hint').style.opacity='0';
+  setTimeout(()=>document.getElementById('sobre-wrap').classList.add('hide'),700);
+  setTimeout(lanzarPalabras,1000);
+}
+function lanzarPalabras(){
+  const scene=document.getElementById('scene');
+  const sw=scene.offsetWidth,sh=scene.offsetHeight,cx=sw/2,cy=sh/2;
+  palabras.forEach((txt,i)=>{
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.className='palabra';el.textContent=txt;
+      el.style.fontSize=rand(12,20)+'px';
+      el.style.color=colores[i%colores.length];
+      el.style.fontWeight=Math.random()>.5?'700':'400';
+      el.style.left=(cx-30)+'px';el.style.top=(cy-10)+'px';
+      const dx=(rand(-1,1)>0?1:-1)*rand(50,sw*.44);
+      const dy=rand(-sh*.58,-sh*.05);
+      el.style.setProperty('--dx',dx+'px');el.style.setProperty('--dy',dy+'px');
+      el.style.setProperty('--r0',rand(-25,25)+'deg');el.style.setProperty('--r1',rand(-45,45)+'deg');
+      el.style.setProperty('--dur',rand(2.6,4)+'s');
+      scene.appendChild(el);setTimeout(()=>el.remove(),5500);
+    },i*110);
+  });
+  const espera=palabras.length*110+3200;
+  setTimeout(()=>{
+    document.getElementById('scene').classList.add('dark');
+    document.getElementById('arbol-wrap').classList.add('show');
+    setTimeout(colocarHojas,1200);
+    setTimeout(()=>document.getElementById('frase').classList.add('show'),1200+palabras.length*70+800);
+  },espera);
+}
+function colocarHojas(){
+  const scene=document.getElementById('scene');
+  const sw=scene.offsetWidth,sh=scene.offsetHeight;
+  const scaleX=sw/520,scaleY=sh/620;
+  palabras.forEach((txt,i)=>{
+    setTimeout(()=>{
+      const p=puntosRamas[i%puntosRamas.length];
+      const el=document.createElement('div');
+      el.className='hoja';el.textContent=txt;
+      el.style.fontSize=rand(9,13)+'px';
+      el.style.color=colores[i%colores.length];
+      const rot=rand(-28,28);
+      el.style.transform=`rotate(${rot}deg)`;
+      el.style.left=(p.x*scaleX-28)+'px';
+      el.style.top=(p.y*scaleY-8)+'px';
+      scene.appendChild(el);
+      requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('show')));
+    },i*80);
+  });
+}
+</script>
